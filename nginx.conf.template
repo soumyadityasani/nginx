@@ -3,15 +3,15 @@ events {
 }
 
 http {
-    resolver __RESOLVER__ valid=10s ipv6=off;
+    resolver 169.254.20.10 valid=10s ipv6=off;
 
     map $connection $backend {
-        ~*[05]$ "smart-attendance-backend:10000";
-        ~*[16]$ "smart-attendance-backend-1:10000";
-        ~*[27]$ "smart-attendance-backend-2:10000";
-        ~*[38]$ "smart-attendance-backend-3:10000";
-        ~*[49]$ "smart-attendance-backend-4:10000";
-        default  "smart-attendance-backend:10000";
+        ~*[05]$ "smart-attendance-backend-n1ql.onrender.com";
+        ~*[16]$ "smart-attendance-backend-1-2tbq.onrender.com";
+        ~*[27]$ "smart-attendance-backend-2-xgo8.onrender.com";
+        ~*[38]$ "smart-attendance-backend-3-xs0e.onrender.com";
+        ~*[49]$ "smart-attendance-backend-4.onrender.com";
+        default  "smart-attendance-backend-n1ql.onrender.com";
     }
 
     server {
@@ -24,15 +24,18 @@ http {
 
         location /api/attendance/ {
             set $upstream $backend;
-            proxy_pass http://$upstream;
+            proxy_pass https://$upstream;
 
-            proxy_set_header Host $host;
+            proxy_set_header Host $upstream;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
 
             proxy_http_version 1.1;
             proxy_set_header Connection "";
+
+            proxy_ssl_server_name on;
+            proxy_ssl_name $upstream;
 
             proxy_next_upstream error timeout http_502 http_503 http_504;
             proxy_next_upstream_tries 5;
