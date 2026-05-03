@@ -6,12 +6,12 @@ http {
     resolver __RESOLVER__ valid=10s ipv6=off;
 
     map $connection $backend {
-        ~*[05]$ "smart-attendance-backend:8081";
-        ~*[16]$ "smart-attendance-backend-1:8081";
-        ~*[27]$ "smart-attendance-backend-2:8081";
-        ~*[38]$ "smart-attendance-backend-3:8081";
-        ~*[49]$ "smart-attendance-backend-4:8081";
-        default  "smart-attendance-backend:8081";
+        ~*[05]$ "smart-attendance-backend:10000";
+        ~*[16]$ "smart-attendance-backend-1:10000";
+        ~*[27]$ "smart-attendance-backend-2:10000";
+        ~*[38]$ "smart-attendance-backend-3:10000";
+        ~*[49]$ "smart-attendance-backend-4:10000";
+        default  "smart-attendance-backend:10000";
     }
 
     server {
